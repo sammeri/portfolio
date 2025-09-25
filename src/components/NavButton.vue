@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useNavigationStore } from '../stores/navigation'
 import MagicBento from './vue-bits/MagicBento/MagicBento.vue'
+
+const navigationStore = useNavigationStore()
 
 const enableStars = ref(true)
 const enableSpotlight = ref(true)
@@ -9,11 +12,15 @@ const spotlightRadius = ref(400)
 const enableTilt = ref(false)
 const clickEffect = ref(true)
 const enableMagnetism = ref(false)
+
+const handleSectionClick = (sectionId) => {
+  navigationStore.setCurrentSection(sectionId)
+}
 </script>
 
 <template>
   <nav class="o-panel" aria-label="Main navigation">
-    <div class="w-full demo-container">
+    <!-- <div class="w-full demo-container">
       <MagicBento
         :enable-stars="enableStars"
         :enable-spotlight="enableSpotlight"
@@ -23,49 +30,44 @@ const enableMagnetism = ref(false)
         :click-effect="clickEffect"
         :enable-magnetism="enableMagnetism"
       />
-    </div>
-    <!-- <div class="o-grid" role="list">
-      <button class="o-tile" role="listitem" aria-label="About">
-        <div class="icon">👤</div>
-        <h4>Обо мне</h4>
-      </button>
-
-      <button class="o-tile" role="listitem" aria-label="Experience">
-        <div class="icon">🎒</div>
-        <h4>Опыт</h4>
-      </button>
-
-      <button class="o-tile" role="listitem" aria-label="Education">
-        <div class="icon">📚</div>
-        <h4>Образование</h4>
-      </button>
-
-      <button class="o-tile" role="listitem" aria-label="Tech Stack">
-        <div class="icon">&lt;/&gt;</div>
-        <h4>Стек</h4>
-      </button>
-
-      <button class="o-tile" role="listitem" aria-label="Portfolio">
-        <div class="icon">🗂️</div>
-        <h4>Портфолио</h4>
-      </button>
-
-      <button class="o-tile" role="listitem" aria-label="Contact">
-        <div class="icon">✉️</div>
-        <h4>Контакты</h4>
-      </button>
-
-      <button class="o-tile" role="listitem" aria-label="Resume">
-        <div class="icon">📄</div>
-        <h4>Резюме</h4>
-      </button>
-
-      <button class="o-tile" role="listitem" aria-label="Team Roles">
-        <div class="icon">👥</div>
-        <h4>Роли</h4>
-      </button>
     </div> -->
+    <div class="o-grid" role="list">
+      <button
+        v-for="section in navigationStore.sections"
+        :key="section.id"
+        class="o-tile"
+        :class="{ active: navigationStore.currentSection === section.id }"
+        role="listitem"
+        :aria-label="section.title"
+        @click="handleSectionClick(section.id)"
+        :disabled="navigationStore.isTransitioning"
+      >
+        <div class="icon">{{ section.icon }}</div>
+        <h4>{{ section.title }}</h4>
+      </button>
+    </div>
   </nav>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.o-tile.active {
+  border-color: rgba(0, 255, 71, 0.4);
+  background: rgba(0, 255, 71, 0.05);
+  box-shadow: 0 0 20px rgba(0, 255, 71, 0.1);
+  transform: translateY(-2px);
+}
+
+.o-tile.active .icon {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 71, 0.6));
+}
+
+.o-tile.active h4 {
+  color: var(--neon);
+  text-shadow: 0 0 10px rgba(0, 255, 71, 0.3);
+}
+
+.o-tile:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+</style>

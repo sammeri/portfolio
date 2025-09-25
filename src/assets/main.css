@@ -73,7 +73,7 @@ body {
   max-width: 920px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
   position: relative;
 }
 
@@ -119,15 +119,19 @@ body {
 .o-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  gap: 12px;
   padding: 18px 6px;
 }
 
 /* Panel object (reusable card) */
 .o-panel {
   border-radius: var(--radius);
-  padding: 18px;
+  padding: 12px;
   border: 1px solid rgba(0, 255, 71, 0.04);
+}
+
+.o-panel.o-panel_no-padding {
+  padding: 0%;
 }
 
 /* Buttons / tiles */
